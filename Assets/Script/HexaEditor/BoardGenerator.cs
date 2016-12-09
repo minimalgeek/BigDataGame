@@ -9,7 +9,6 @@ public class BoardLayout {
     public Vector2 startPosition;
     public float xShift;
     public float yShift;
-    public float xShiftIncrement;
 }
 
 [ExecuteInEditMode]
@@ -31,20 +30,18 @@ public class BoardGenerator : MonoBehaviour {
             GameObject.DestroyImmediate(transform.GetChild(0).gameObject);
         }
 
-        int initialXShift = layout.rows / 2;
         Vector2 newPos = new Vector2();
-        for (int i = -initialXShift; i <= initialXShift; i++)
+        for (int i = 0; i < layout.rows; i++)
         {
-            int absOfI = Mathf.Abs(i);
-            for (int j = 0; j < layout.maxColumns - absOfI; j++)
+            for (int j = 0; j < layout.maxColumns; j++) //  - absOfI
             {
-                newPos.x = layout.startPosition.x + j * layout.xShift + absOfI * layout.xShiftIncrement;
+                newPos.x = layout.startPosition.x + j * layout.xShift;
                 newPos.y = layout.startPosition.y + i * layout.yShift;
                 GameObject instantiatedHexa = (GameObject)Instantiate(hexaPrefab, newPos, Quaternion.identity);
                 instantiatedHexa.transform.SetParent(this.gameObject.transform);
 
                 HexaProperties propz = instantiatedHexa.GetComponent<HexaProperties>();
-                propz.row = i + initialXShift;
+                propz.row = i;
                 propz.column = j;
             }
         }

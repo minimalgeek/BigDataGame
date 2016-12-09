@@ -25,11 +25,11 @@ public class TimeSeriesAnimator : MonoBehaviour
     public bool shouldGenerateRandom = true;
     public float randomValueMax = 1f;
     public float randomDivision = 1f;
-    public int rows = 7;
-    public int cols = 11;
+    public int rows = 10;
+    public int cols = 10;
 
     public List<CoordinateWithTimeSeries> items;
-    private float timePassed = 0f;
+    private int iterationIndex = 0;
 
     void Start()
     {
@@ -56,22 +56,7 @@ public class TimeSeriesAnimator : MonoBehaviour
 
     void Update()
     {
-        timePassed += Time.deltaTime;
-        foreach (CoordinateWithTimeSeries coord in items)
-        {
-            if (coord.bindedHexa != null)
-            {
-                foreach (TimeSeriesItem item in coord.timeSeriesItems)
-                {
-                    if (item.from <= timePassed && item.to >= timePassed)
-                    {
-                        iTween.ScaleTo(coord.histoColumn, new Vector3(0.5f, item.value, 1), randomDivision);
-                        break;
-                    }
-                }
-            }
-        }
-    
+
     }
 
     private List<CoordinateWithTimeSeries> GenerateRandom(float startTime, float endTime, float increment)
@@ -99,5 +84,18 @@ public class TimeSeriesAnimator : MonoBehaviour
         }
 
         return coordinates;
+    }
+
+    public void JumpToNextSeriesItem()
+    {
+        iterationIndex += 1;
+        foreach (CoordinateWithTimeSeries coord in items)
+        {
+            if (coord.bindedHexa != null && iterationIndex < coord.timeSeriesItems.Count)
+            {
+                TimeSeriesItem item = coord.timeSeriesItems[iterationIndex];
+                iTween.ScaleTo(coord.histoColumn, new Vector3(0.5f, item.value, 1), randomDivision);
+            }
+        }
     }
 }
