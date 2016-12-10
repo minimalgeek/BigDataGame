@@ -1805,6 +1805,16 @@ Prefab:
       propertyPath: endGameLabel
       value: 
       objectReference: {fileID: 1358604111}
+    - target: {fileID: 114000013164217544, guid: 8e0020fa3cd438249a828243571e3971,
+        type: 2}
+      propertyPath: csvFile
+      value: 
+      objectReference: {fileID: 4900000, guid: 4152d63a12136c142a75f2f2ae7a9435, type: 3}
+    - target: {fileID: 114000011120664790, guid: 8e0020fa3cd438249a828243571e3971,
+        type: 2}
+      propertyPath: normalizeValue
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8e0020fa3cd438249a828243571e3971, type: 2}
   m_IsPrefabParent: 0
@@ -5841,7 +5851,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Main
+          m_StringArgument: Main3
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -7582,7 +7592,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Predict the <b>highest number of calls</b> on the map of Budapest!
+  m_Text: 'Predict the <b>best sales spots</b> on the map of Budapest!
 
     Mark <i>3 areas</i>, then ride to Battle!'
 --- !u!222 &925197419

@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
         set
         {
             playerPoints = value;
-            playerPointsLabel.text = "Player: " + playerPoints.ToString();
+            playerPointsLabel.text = "Telekom: " + playerPoints.ToString();
         }
     }
 
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         set
         {
             aiPoints = value;
-            aiPointsLabel.text = "Prediction: " + aiPoints.ToString();
+            aiPointsLabel.text = "Vodafone: " + aiPoints.ToString();
         }
     }
 
@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
             endGameLabel.text = "You won! :)";
         } else
         {
-            endGameLabel.text = "AI won! :(";
+            endGameLabel.text = "Vodafone won! :(";
         }
     }
 }
