@@ -1,64 +1,93 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class SelectManager : MonoBehaviour {
+public class SelectManager : MonoBehaviour
+{
 
-    private GameObject selected = null;
+    public int maxSelectable = 3;
+    public Color restoreColor;
+    public Color markColor;
+    private List<GameObject> selectedList = new List<GameObject>();
+
     private Vector3 selectedScale;
-    private float alphaRestoreValue;
+
 
     public float scaleMultiplier;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    public List<GameObject> FullSelectedList
+    {
+        get
+        {
+            if (selectedList.Count == maxSelectable)
+                return selectedList;
+            return null;
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 screenPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(screenPos, Vector2.zero);
             if (hit.collider != null && hit.collider.tag == Constants.HEXA_TAG)
             {
-                if (hit.collider.gameObject == selected)
+                GameObject go = hit.collider.gameObject;
+                if (selectedList.Contains(go))
                 {
-                    return;
+                    selectedList.Remove(go);
+                    RestoreOldObject(go);
+                }
+                else if (selectedList.Count < maxSelectable)
+                {
+                    selectedList.Add(go);
+                    AnimateNewObject(go);
                 }
 
-                RestoreOldObject();
-                AnimateNewObject(hit);
             }
         }
     }
 
-    private void RestoreOldObject()
+    private void RestoreOldObject(GameObject hit)
     {
-        if (selected != null)
-        {
-            iTween.Stop(selected);
-            iTween.ScaleTo(selected, selectedScale, 0.2f);
-            Color restoreColor = selected.GetComponent<SpriteRenderer>().color;
-            restoreColor.a = alphaRestoreValue;
-            selected.GetComponent<SpriteRenderer>().color = restoreColor;
-        }
+        iTween.Stop(hit);
+        iTween.ScaleTo(hit, selectedScale, 0.2f);
+        hit.GetComponent<SpriteRenderer>().color = restoreColor;
     }
 
-    private void AnimateNewObject(RaycastHit2D hit)
+    private void AnimateNewObject(GameObject hit)
     {
-        selected = hit.collider.gameObject;
-
-        selectedScale = selected.transform.localScale;
-        Color newColor = selected.GetComponent<SpriteRenderer>().color;
-        alphaRestoreValue = newColor.a;
-        newColor.a = 255;
-
+        selectedScale = hit.transform.localScale;
+        
         // change values
-        iTween.ScaleTo(selected, 
-            iTween.Hash("x", selectedScale.x * scaleMultiplier, 
-                        "y", selectedScale.y * scaleMultiplier, 
+        iTween.ScaleTo(hit,
+            iTween.Hash("x", selectedScale.x * scaleMultiplier,
+                        "y", selectedScale.y * scaleMultiplier,
                         "time", 0.5, "looptype", "pingpong"));
-        selected.GetComponent<SpriteRenderer>().color = newColor;
+        hit.GetComponent<SpriteRenderer>().color = markColor;
     }
+
+    public void ResetAll()
+    {
+        foreach (GameObject go in selectedList)
+        {
+            RestoreOldObject(go);
+        }
+
+        selectedList.Clear();
+    }
+
+    //public List<TimeSeriesItem> GetSelectedTimeSeriesItems(int idx)
+    //{
+    //    List<TimeSeriesItem> ret = new List<TimeSeriesItem>();
+
+    //    foreach (GameObject sel in selectedList)
+    //    {
+    //        ret.Add
+    //    }
+
+    //    return ret;
+    //}
 }

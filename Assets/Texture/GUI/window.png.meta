@@ -1,11 +1,12 @@
 fileFormatVersion: 2
 guid: fa9020bcb99bdaa4ea6a00cf4e71318a
-timeCreated: 1481330617
+timeCreated: 1481363423
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Levels
     21300002: Message
+    21300004: GameEnd
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -75,6 +76,19 @@ TextureImporter:
         y: 2157
         width: 671
         height: 625
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: GameEnd
+      rect:
+        serializedVersion: 2
+        x: 2477
+        y: 4302
+        width: 1174
+        height: 811
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 [System.Serializable]
 public class TimeSeriesItem
@@ -9,6 +10,8 @@ public class TimeSeriesItem
     public float to;
     public float predictedValue;
     public float realValue;
+
+    public CoordinateWithTimeSeries parent;
 }
 
 [System.Serializable]
@@ -17,7 +20,7 @@ public class CoordinateWithTimeSeries
     public int row;
     public int column;
     public List<TimeSeriesItem> timeSeriesItems = new List<TimeSeriesItem>();
-    public GameObject bindedHexa;
+    public GameObject bindedField;
     public GameObject histoColumn;
 }
 
@@ -28,14 +31,19 @@ public class TimeSeriesAnimator : MonoBehaviour
     public float randomDivision = 1f;
     public int rows = 10;
     public int cols = 10;
+    public Color defaultColorOfField;
+    public Color bestMarkColor;
 
     public List<CoordinateWithTimeSeries> items;
+    private List<TimeSeriesItem> currentTimeSeriesItems;
     private int iterationIndex = 0;
     private GameManager gameManager;
+    private SelectManager selectManager;
 
     void Awake()
     {
         gameManager = GetComponent<GameManager>();
+        selectManager = GetComponent<SelectManager>();
     }
 
     void Start()
@@ -54,14 +62,14 @@ public class TimeSeriesAnimator : MonoBehaviour
                 HexaProperties propz = hexa.GetComponent<HexaProperties>();
                 if (propz.row == coord.row && propz.column == coord.column)
                 {
-                    coord.bindedHexa = hexa;
+                    coord.bindedField = hexa;
                     coord.histoColumn = hexa.transform.GetChild(0).gameObject;
                     break;
                 }
             }
         }
 
-        JumpToNextSeriesItem();
+        NextRound();
     }
 
     void Update()
@@ -89,6 +97,7 @@ public class TimeSeriesAnimator : MonoBehaviour
                     timeSeriesItem.to = i + increment;
                     timeSeriesItem.predictedValue = Random.Range(0, randomValueMax);
                     timeSeriesItem.realValue = Mathf.Clamp(timeSeriesItem.predictedValue * (0.8f + Random.Range(0f, 0.4f)), 0f, 1f);
+                    timeSeriesItem.parent = coord;
                     coord.timeSeriesItems.Add(timeSeriesItem);
                 }
             }
@@ -97,16 +106,79 @@ public class TimeSeriesAnimator : MonoBehaviour
         return coordinates;
     }
 
-    public void JumpToNextSeriesItem()
+    public void EvaluateBattle()
     {
+        if (selectManager.FullSelectedList == null)
+        {
+            return;
+        }
+
+        List<TimeSeriesItem> playerVotes = new List<TimeSeriesItem>();
+        foreach (GameObject go in selectManager.FullSelectedList)
+        {
+            foreach (CoordinateWithTimeSeries coord in items)
+            {
+                if (coord.bindedField == go)
+                {
+                    playerVotes.Add(coord.timeSeriesItems[iterationIndex]);
+                    break;
+                }
+            }
+        }
+
+        IEnumerable<TimeSeriesItem> biggestIncrementListAI =
+          (from item in currentTimeSeriesItems
+           orderby (item.predictedValue) descending
+           select item).Take(playerVotes.Count);
+
+        List<TimeSeriesItem> aiVotes = new List<TimeSeriesItem>(biggestIncrementListAI);
+
+        IEnumerable<TimeSeriesItem> realBiggestList =
+          (from item in currentTimeSeriesItems
+           orderby (item.realValue) descending
+           select item).Take(playerVotes.Count);
+
+        int playerPoint = 0, aiPoint = 0;
+        foreach (TimeSeriesItem bigItem in realBiggestList)
+        {
+            if (playerVotes.Contains(bigItem))
+            {
+                playerPoint++;
+            }
+            if (aiVotes.Contains(bigItem))
+            {
+                aiPoint++;
+            }
+
+            iTween.ColorTo(bigItem.parent.bindedField, bestMarkColor, 0.5f);
+        }
+
+        gameManager.AiPoints = aiPoint;
+        gameManager.PlayerPoints = playerPoint;
+
+        NextRound();
+    }
+
+    private void NextRound()
+    {
+        currentTimeSeriesItems = new List<TimeSeriesItem>();
+        selectManager.ResetAll();
         iterationIndex += 1;
         foreach (CoordinateWithTimeSeries coord in items)
         {
-            if (coord.bindedHexa != null && iterationIndex < coord.timeSeriesItems.Count)
+            iTween.ColorTo(coord.bindedField, defaultColorOfField, 0.5f);
+            if (coord.bindedField != null && iterationIndex < coord.timeSeriesItems.Count)
             {
                 TimeSeriesItem item = coord.timeSeriesItems[iterationIndex];
+                currentTimeSeriesItems.Add(item);
                 iTween.ScaleTo(coord.histoColumn, new Vector3(0.5f, item.predictedValue, 1), randomDivision);
             }
+
+            if (iterationIndex >= coord.timeSeriesItems.Count)
+            {
+                gameManager.FinishGame();
+            }
         }
+        gameManager.UpdateRoundsLabel(iterationIndex + 1);
     }
 }

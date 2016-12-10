@@ -54,6 +54,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rounds: 0
+  roundsLabel: {fileID: 0}
+  playerPoints: 0
+  aiPoints: 0
+  playerPointsLabel: {fileID: 0}
+  aiPointsLabel: {fileID: 0}
+  endGamePanel: {fileID: 0}
+  endGameLabel: {fileID: 0}
 --- !u!114 &114000011120664790
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -70,6 +77,8 @@ MonoBehaviour:
   randomDivision: 1
   rows: 10
   cols: 10
+  defaultColorOfField: {r: 1, g: 1, b: 1, a: 1}
+  bestMarkColor: {r: 0, g: 0, b: 1, a: 1}
   items: []
 --- !u!114 &114000011752831944
 MonoBehaviour:
@@ -82,4 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68d2885c1395c54b84fad8311d740b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxSelectable: 3
+  restoreColor: {r: 1, g: 1, b: 1, a: 0.19607843}
+  markColor: {r: 1, g: 1, b: 1, a: 1}
   scaleMultiplier: 1.2
