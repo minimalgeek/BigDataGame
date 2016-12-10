@@ -9,3 +9,9 @@ EditorBuildSettings:
     path: Assets/Scene/Menu.unity
   - enabled: 1
     path: Assets/Scene/Main.unity
+  - enabled: 1
+    path: Assets/Scene/Main2.unity
+  - enabled: 1
+    path: Assets/Scene/Main3.unity
+  - enabled: 1
+    path: Assets/Scene/Main4.unity
