@@ -15,6 +15,7 @@ public class BoardGenerator : MonoBehaviour {
 
     public GameObject hexaPrefab;
     public BoardLayout layout;
+    public Color defaultColor;
 
 	// Use this for initialization
 	void Start () {
@@ -38,6 +39,7 @@ public class BoardGenerator : MonoBehaviour {
                 newPos.y = layout.startPosition.y + i * layout.yShift;
                 GameObject instantiatedHexa = (GameObject)Instantiate(hexaPrefab, newPos, Quaternion.identity);
                 instantiatedHexa.transform.SetParent(this.gameObject.transform);
+                instantiatedHexa.GetComponent<SpriteRenderer>().color = defaultColor;
 
                 HexaProperties propz = instantiatedHexa.GetComponent<HexaProperties>();
                 propz.row = i;

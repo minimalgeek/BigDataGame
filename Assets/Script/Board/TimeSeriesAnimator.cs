@@ -34,7 +34,6 @@ public class TimeSeriesAnimator : MonoBehaviour
     public float normalizeValue;
     public int rows = 10;
     public int cols = 10;
-    public Color defaultColorOfField;
 
     public List<CoordinateWithTimeSeries> items;
     private List<TimeSeriesItem> currentTimeSeriesItems;
