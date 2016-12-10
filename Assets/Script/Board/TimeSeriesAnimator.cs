@@ -7,7 +7,8 @@ public class TimeSeriesItem
 {
     public float from;
     public float to;
-    public float value;
+    public float predictedValue;
+    public float realValue;
 }
 
 [System.Serializable]
@@ -30,6 +31,12 @@ public class TimeSeriesAnimator : MonoBehaviour
 
     public List<CoordinateWithTimeSeries> items;
     private int iterationIndex = 0;
+    private GameManager gameManager;
+
+    void Awake()
+    {
+        gameManager = GetComponent<GameManager>();
+    }
 
     void Start()
     {
@@ -37,6 +44,7 @@ public class TimeSeriesAnimator : MonoBehaviour
         {
             items = GenerateRandom(0, 24, randomDivision);
         }
+        gameManager.rounds = items[0].timeSeriesItems.Count;
 
         GameObject[] hexas = GameObject.FindGameObjectsWithTag(Constants.HEXA_TAG);
         foreach (CoordinateWithTimeSeries coord in items)
@@ -52,6 +60,8 @@ public class TimeSeriesAnimator : MonoBehaviour
                 }
             }
         }
+
+        JumpToNextSeriesItem();
     }
 
     void Update()
@@ -77,7 +87,8 @@ public class TimeSeriesAnimator : MonoBehaviour
                     TimeSeriesItem timeSeriesItem = new TimeSeriesItem();
                     timeSeriesItem.from = i;
                     timeSeriesItem.to = i + increment;
-                    timeSeriesItem.value = Random.Range(0, randomValueMax);
+                    timeSeriesItem.predictedValue = Random.Range(0, randomValueMax);
+                    timeSeriesItem.realValue = Mathf.Clamp(timeSeriesItem.predictedValue * (0.8f + Random.Range(0f, 0.4f)), 0f, 1f);
                     coord.timeSeriesItems.Add(timeSeriesItem);
                 }
             }
@@ -94,7 +105,7 @@ public class TimeSeriesAnimator : MonoBehaviour
             if (coord.bindedHexa != null && iterationIndex < coord.timeSeriesItems.Count)
             {
                 TimeSeriesItem item = coord.timeSeriesItems[iterationIndex];
-                iTween.ScaleTo(coord.histoColumn, new Vector3(0.5f, item.value, 1), randomDivision);
+                iTween.ScaleTo(coord.histoColumn, new Vector3(0.5f, item.predictedValue, 1), randomDivision);
             }
         }
     }
