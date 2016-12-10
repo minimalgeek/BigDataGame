@@ -2695,6 +2695,16 @@ Prefab:
       propertyPath: endGameLabel
       value: 
       objectReference: {fileID: 1358604111}
+    - target: {fileID: 114000013164217544, guid: 8e0020fa3cd438249a828243571e3971,
+        type: 2}
+      propertyPath: csvFile
+      value: 
+      objectReference: {fileID: 4900000, guid: 3497acc9544830b4a9c5a9a886b3328e, type: 3}
+    - target: {fileID: 114000011120664790, guid: 8e0020fa3cd438249a828243571e3971,
+        type: 2}
+      propertyPath: normalizeValue
+      value: 43
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8e0020fa3cd438249a828243571e3971, type: 2}
   m_IsPrefabParent: 0
