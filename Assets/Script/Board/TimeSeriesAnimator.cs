@@ -69,7 +69,7 @@ public class TimeSeriesAnimator : MonoBehaviour
             }
         }
 
-        NextRound();
+        StartCoroutine(NextRound());
     }
 
     void Update()
@@ -150,23 +150,24 @@ public class TimeSeriesAnimator : MonoBehaviour
                 aiPoint++;
             }
 
-            iTween.ColorTo(bigItem.parent.bindedField, bestMarkColor, 0.5f);
+            bigItem.parent.bindedField.GetComponent<SpriteRenderer>().color = bestMarkColor;
         }
 
-        gameManager.AiPoints = aiPoint;
-        gameManager.PlayerPoints = playerPoint;
+        gameManager.AiPoints += aiPoint;
+        gameManager.PlayerPoints += playerPoint;
 
-        NextRound();
+        StartCoroutine(NextRound());
     }
 
-    private void NextRound()
+    private IEnumerator NextRound()
     {
+        yield return new WaitForSeconds(2f);
         currentTimeSeriesItems = new List<TimeSeriesItem>();
         selectManager.ResetAll();
         iterationIndex += 1;
         foreach (CoordinateWithTimeSeries coord in items)
         {
-            iTween.ColorTo(coord.bindedField, defaultColorOfField, 0.5f);
+            coord.bindedField.GetComponent<SpriteRenderer>().color = defaultColorOfField;
             if (coord.bindedField != null && iterationIndex < coord.timeSeriesItems.Count)
             {
                 TimeSeriesItem item = coord.timeSeriesItems[iterationIndex];

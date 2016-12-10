@@ -19,6 +19,11 @@ public class GameManager : MonoBehaviour
 
     public int PlayerPoints
     {
+        get
+        {
+            return playerPoints;
+        }
+
         set
         {
             playerPoints = value;
@@ -28,6 +33,11 @@ public class GameManager : MonoBehaviour
 
     public int AiPoints
     {
+        get
+        {
+            return aiPoints;
+        }
+
         set
         {
             aiPoints = value;

@@ -77,8 +77,8 @@ MonoBehaviour:
   randomDivision: 1
   rows: 10
   cols: 10
-  defaultColorOfField: {r: 1, g: 1, b: 1, a: 1}
-  bestMarkColor: {r: 0, g: 0, b: 1, a: 1}
+  defaultColorOfField: {r: 1, g: 1, b: 1, a: 0.19607843}
+  bestMarkColor: {r: 1, g: 0, b: 0, a: 1}
   items: []
 --- !u!114 &114000011752831944
 MonoBehaviour:
